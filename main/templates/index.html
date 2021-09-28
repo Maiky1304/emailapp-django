@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Email Sender</title>
+
+    <script src="https://kit.fontawesome.com/733ec56f12.js" crossorigin="anonymous"></script>
+
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">    
+</head>
+<body style="--bs-body-bg: #2C2F33;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <h1 class="navbar-brand mb-0 h1">
+                <i class="fas fa-mail-bulk"></i>
+                Email Sender
+            </h1>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if alert is not None %}
+        <div class="alert alert-{{alert.type}}" role="alert">
+            {{ alert.message }}
+        </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-4 align-self-start">
+                <div class="send_mail card bg-dark text-light">
+                    <div class="card-header">
+                        Send Email
+                    </div>
+                    
+                    <div class="card-body">
+                        <form action="/mail/send/" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="email" class="form-label">For who is the email?</label>
+                                <input type="email" name="email" class="form-control" placeholder="example@google.com" aria-describedby="email_help" />
+                                <div id="email_help" class="form-text text-light">Enter the email address(es) that have to receive this message.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Subject</label>
+                                <input type="text" name="subject" class="form-control" placeholder="..." />
+                            </div>
+                            <div class="col-12-8">
+                                <label for="text" class="form-label">Type out a message for the email:</label>
+                                <input type="text" name="content" class="form-control input-lg h-6" placeholder="..." />
+                            </div>
+                            <button type="submit" class="btn mt-2 text-light pull-right" style="background: #8A2BE2">Send email</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8 align-self-start">
+                <div class="outbox card bg-dark text-light">
+                    <div class="card-header">
+                        {% if total_size == 0 %}
+                        Email Outbox
+                        {% else %}
+                        Email Outbox ({{ total_size }})
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card-body">
+                        {% if total_size == 0 %}
+                            <p style="color: red;">Send an email first!</p>
+                        {% else %}
+                            {% for mail in outbox %}
+                                <div class="card mt-2 bg-secondary text-light">
+                                    <div class="card-header">
+                                        Subject: {{ mail.subject }}
+                                        To: {{ mail.email }}
+                                    </div>
+                                    <div class="card-body">
+                                        {{ mail.content }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+</body>
+</html>

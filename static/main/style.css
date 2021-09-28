@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@200&display=swap');
+
+body {
+    font-family: 'Noto Sans Display', sans-serif;
+    margin: 0px auto;
+    --bs-body-bg: '#2C2F33';
+}
+
+.container {
+    padding-top: 100px;
+}
